@@ -5,8 +5,8 @@
 #include <linux/version.h>
 #include <linux/proc_fs.h>
 #include <linux/slab.h>
+#include <linux/acpi.h>
 #include <asm/uaccess.h>
-#include <acpi/acpi.h>
 
 MODULE_LICENSE("GPL");
 
@@ -14,6 +14,8 @@ MODULE_LICENSE("GPL");
 /*
 #define DEBUG
 */
+
+struct task_struct;
 
 #define BUFFER_SIZE 256
 #define MAX_ACPI_ARGS 16
@@ -274,7 +276,7 @@ static int acpi_proc_write( struct file *filp, const char __user *buff,
         return -ENOSPC;
     }
 
-    if (copy_from_user( input, buff, len )) {
+    if (raw_copy_from_user( input, buff, len )) {
         return -EFAULT;
     }
     input[len] = '\0';
